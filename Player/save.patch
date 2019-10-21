@@ -1,0 +1,54 @@
+diff --git a/mobile/src/main/java/com/example/satayam/mypetplayer/PlayerActivity.java b/mobile/src/main/java/com/example/satayam/mypetplayer/PlayerActivity.java
+index c6e32a1..2c43366 100644
+--- a/mobile/src/main/java/com/example/satayam/mypetplayer/PlayerActivity.java
++++ b/mobile/src/main/java/com/example/satayam/mypetplayer/PlayerActivity.java
+@@ -96,6 +96,7 @@ import java.net.MalformedURLException;
+ import java.net.URL;
+ import java.util.ArrayList;
+ import java.util.Arrays;
++import java.util.HashMap;
+ import java.util.HashSet;
+ import java.util.Iterator;
+ import java.util.List;
+@@ -135,6 +136,7 @@ public class PlayerActivity extends AppCompatActivity {
+   public DialogPlus subtitleLoadingDialog = null;
+   public DialogPlus subtitleTitleDialog = null;
+ 
++  private HashMap<String, WordInCache> wordInMemCache = new HashMap<String, WordInCache>();
+   private DefaultDataSourceFactory dataSourceFactory;
+   private MediaSource mediaSource;
+   private MediaSource videoSource;
+@@ -244,6 +246,8 @@ public class PlayerActivity extends AppCompatActivity {
+                          WordMeanings wordResult = parseJson(response);
+                          wdef.setWord(wordResult.getWord());
+                          wdef.setDefinition(wordResult.getFirstMeaning() != null ? wordResult.getFirstMeaning() : "Sorry Definition Not Found !!!");
++                         if(wordResult.getFirstMeaning() != null)
++                            wordInMemCache.put(word, new WordInCache(wordResult.getFirstMeaning(), response, wordResult));
+                          wordmeaningList.add(wordResult);
+                          worddefAdapter.notifyDataSetChanged();
+                      }
+@@ -300,8 +304,22 @@ public class PlayerActivity extends AppCompatActivity {
+ 
+       worddefAdapter.notifyDataSetChanged();
+ 
+-      for(int i = 0; i < splitStr.size(); i++)
+-         makeJsonArryReq(splitStr.get(i));
++      for(int i = 0; i < splitStr.size(); i++) {
++          String word = splitStr.get(i);
++          WordInCache obj = wordInMemCache.get(splitStr.get(i));
++          if(obj != null) {
++              if (updatedItemsInAdapter <= numberOfRequests) {
++                  Worddefinition wdef = worddefList.get(updatedItemsInAdapter++);
++                  wdef.setDidload(true);
++                  wdef.setWord(word);
++                  wdef.setDefinition(obj.getFirstDefinition() != null ? obj.getFirstDefinition() : "Sorry Definition Not Found !!!");
++                  wordmeaningList.add(obj.getWordMeanings());
++                  worddefAdapter.notifyDataSetChanged();
++              }
++          }
++          else
++              makeJsonArryReq(splitStr.get(i));
++      }
+   }
+     /**
+      * RecyclerView item decoration - give equal margin around grid item

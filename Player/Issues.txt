@@ -1,0 +1,7 @@
+1. align file chooser, removing the date and size of the file
+2. remove the highlight item in the file chooser
+3. hide status bar on invoking file chooser and also when clicked edittextview - fixed
+4. when no items are there show no vocab items present card
+5. Voice tts integration - done
+6. Important DB
+

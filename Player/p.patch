@@ -1,0 +1,107 @@
+diff --git a/.idea/assetWizardSettings.xml b/.idea/assetWizardSettings.xml
+deleted file mode 100644
+index 2c50b8e..0000000
+--- a/.idea/assetWizardSettings.xml
++++ /dev/null
+@@ -1,47 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-<project version="4">
+-  <component name="WizardSettings">
+-    <option name="children">
+-      <map>
+-        <entry key="vectorWizard">
+-          <value>
+-            <PersistentState>
+-              <option name="children">
+-                <map>
+-                  <entry key="vectorAssetStep">
+-                    <value>
+-                      <PersistentState>
+-                        <option name="children">
+-                          <map>
+-                            <entry key="clipartAsset">
+-                              <value>
+-                                <PersistentState>
+-                                  <option name="values">
+-                                    <map>
+-                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/hardware/ic_keyboard_black_24dp.xml" />
+-                                    </map>
+-                                  </option>
+-                                </PersistentState>
+-                              </value>
+-                            </entry>
+-                          </map>
+-                        </option>
+-                        <option name="values">
+-                          <map>
+-                            <entry key="color" value="ffffff" />
+-                            <entry key="outputName" value="ic_keyboard" />
+-                            <entry key="sourceFile" value="C:\Users\mvyaghre" />
+-                          </map>
+-                        </option>
+-                      </PersistentState>
+-                    </value>
+-                  </entry>
+-                </map>
+-              </option>
+-            </PersistentState>
+-          </value>
+-        </entry>
+-      </map>
+-    </option>
+-  </component>
+-</project>
+\ No newline at end of file
+diff --git a/mobile/ExoPlayer/extensions/cast/build.gradle b/mobile/ExoPlayer/extensions/cast/build.gradle
+index 30fe100..ad25e12 100644
+--- a/mobile/ExoPlayer/extensions/cast/build.gradle
++++ b/mobile/ExoPlayer/extensions/cast/build.gradle
+@@ -16,7 +16,7 @@ apply plugin: 'com.android.library'
+ 
+ android {
+     compileSdkVersion project.ext.compileSdkVersion
+-    buildToolsVersion project.ext.buildToolsVersion
++    buildToolsVersion '28.0.3'
+ 
+     compileOptions {
+         sourceCompatibility JavaVersion.VERSION_1_8
+diff --git a/mobile/ExoPlayer/extensions/ffmpeg/build.gradle b/mobile/ExoPlayer/extensions/ffmpeg/build.gradle
+index 4c08554..df101e1 100644
+--- a/mobile/ExoPlayer/extensions/ffmpeg/build.gradle
++++ b/mobile/ExoPlayer/extensions/ffmpeg/build.gradle
+@@ -16,7 +16,7 @@ apply plugin: 'com.android.library'
+ 
+ android {
+     compileSdkVersion project.ext.compileSdkVersion
+-    buildToolsVersion project.ext.buildToolsVersion
++    buildToolsVersion '28.0.3'
+ 
+     compileOptions {
+         sourceCompatibility JavaVersion.VERSION_1_8
+diff --git a/mobile/ExoPlayer/library/core/src/main/java/com/google/android/exoplayer2/trackselection/DefaultTrackSelector.java b/mobile/ExoPlayer/library/core/src/main/java/com/google/android/exoplayer2/trackselection/DefaultTrackSelector.java
+index 4a75b6f..637394c 100644
+--- a/mobile/ExoPlayer/library/core/src/main/java/com/google/android/exoplayer2/trackselection/DefaultTrackSelector.java
++++ b/mobile/ExoPlayer/library/core/src/main/java/com/google/android/exoplayer2/trackselection/DefaultTrackSelector.java
+@@ -1859,7 +1859,7 @@ public class DefaultTrackSelector extends MappingTrackSelector {
+             if (formatHasLanguage(format, params.preferredAudioLanguage)) {
+               trackScore = 2;
+             } else {
+-              trackScore = 1;
++              trackScore = 100;
+             }
+           } else {
+             // Track should not be selected.
+diff --git a/mobile/src/main/java/com/example/satayam/mypetplayer/PlayerActivity.java b/mobile/src/main/java/com/example/satayam/mypetplayer/PlayerActivity.java
+index c6e32a1..603ddbf 100644
+--- a/mobile/src/main/java/com/example/satayam/mypetplayer/PlayerActivity.java
++++ b/mobile/src/main/java/com/example/satayam/mypetplayer/PlayerActivity.java
+@@ -642,6 +642,9 @@ public class PlayerActivity extends AppCompatActivity {
+         protected void onProgressUpdate(Integer... progress) {}
+ 
+         protected void onPostExecute(Long result) {
++            if(!subtitleLoadingDialog.isShowing())
++                return;
++
+             TextView subtitlesHeader = (TextView) findViewById(R.id.subtitles_loading_header);
+             final EditText searchManually = (EditText) findViewById(R.id.search_manually);
+             View view = findViewById(R.id.dots);
